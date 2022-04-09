@@ -9,16 +9,16 @@ export class Address {
     zip?: number;
   }
   
-  export class ContactCard {
-    key: string;
-    firstName?: string;
-    lastName?: string;
-    address?: Address;
-    email?: string;
-    phone?: number;
-    notes?: string;
-  
-    constructor () {
-      this.key = uuidv4();
-    }
+export class ContactCard {
+  key: string;
+  firstName?: string;
+  lastName?: string;
+  address?: Address;
+  email?: string;
+  phone?: number;
+  notes?: string;
+
+  constructor () {
+    this.key = uuidv4();
   }
+}
