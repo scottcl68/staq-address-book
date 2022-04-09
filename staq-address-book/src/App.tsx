@@ -11,7 +11,7 @@ import ReactTable from "react-table";
 //initialize contact container
 let contacts = new Map<string, ContactCard>();
 
-//generate 25 new contact cards with first and sur names only
+//generate 50 new contact cards with first and sur names only
 for (let i = 0; i < 50; i++) {
   let firstName = firstNames[Math.floor(Math.random() * firstNames.length)]
   let lastName = lastNames[Math.floor(Math.random() * lastNames.length)]
@@ -38,6 +38,26 @@ function ListEntry (props) {
     );
 }
 
+class ContactList extends React.Component {
+    render() {
+        const users = Array.from(contacts.values());
+        return (
+            <div className="contact-list">
+                <div>
+                    <div className='contact-list-head'>Contacts</div>
+                    <div className='contact-list-body'>
+                        {users.map(user =>
+                            <div className='contact-list-entry' key={user.key}>
+                                {user.lastName + ", " + user.firstName}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+
 
 
 class App extends React.Component {
@@ -48,18 +68,7 @@ class App extends React.Component {
                 <div className='page-header'>
                     <h1 className='page-header-text'>STAQ FINANCE ADDRESS BOOK</h1>
                 </div>
-                <div className="contact-list">
-                    <div>
-                        <div className='contact-list-head'>Contacts</div>
-                        <div className='contact-list-body'>
-                            {users.map(user =>
-                                <div className='contact-list-entry' key={user.key}>
-                                    {user.lastName + ", " + user.firstName}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
+                <ContactList />
             </div>
         );
     }
