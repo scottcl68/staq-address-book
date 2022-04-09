@@ -12,7 +12,7 @@ import ReactTable from "react-table";
 let contacts = new Map<string, ContactCard>();
 
 //generate 25 new contact cards with first and sur names only
-for (let i = 0; i < 25; i++) {
+for (let i = 0; i < 50; i++) {
   let firstName = firstNames[Math.floor(Math.random() * firstNames.length)]
   let lastName = lastNames[Math.floor(Math.random() * lastNames.length)]
   let contact = new ContactCard();
@@ -27,36 +27,42 @@ function addNewContact(newContact: ContactCard){
   contacts.set(newContact.key, newContact)
 }
 
+function ListEntry (props) {
+    return (
+        <div
+            className='list-entry'
+            // onClick={}
+        >
+            {props.name} 
+        </div>
+    );
+}
 
 
-function App() {
-  const [users, setUsers] = useState(Array.from(contacts.values()));
-  return (
-    <div>
-        <div className='page-header'>
-            <h1>STAQ ADDRESS BOOK</h1>
-        </div>
-        <div className="contact-list">
-            <h3 className="contact-list-header">Contact List</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users && users.map(user =>
-                        <tr key={user.key}>
-                            <td>{user.firstName}</td>
-                            <td>{user.lastName}</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-        </div>
-    </div>
-);
+
+class App extends React.Component {
+    render() {
+        const users = Array.from(contacts.values());
+        return (
+            <div className='page'>
+                <div className='page-header'>
+                    <h1 className='page-header-text'>STAQ FINANCE ADDRESS BOOK</h1>
+                </div>
+                <div className="contact-list">
+                    <div>
+                        <div className='contact-list-head'>Contacts</div>
+                        <div className='contact-list-body'>
+                            {users.map(user =>
+                                <div className='contact-list-entry' key={user.key}>
+                                    {user.lastName + ", " + user.firstName}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 }
 
 export default App;
