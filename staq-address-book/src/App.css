@@ -18,6 +18,8 @@
 .contact-list {
   margin: auto;
   width: 450px;
+  border: 4px solid;
+  border-radius: 3px;
 }
 .contact-list-head {
   text-align: center;
@@ -31,6 +33,7 @@
   width: inherit;
   height: 400px;
   overflow: scroll;
+  overflow-x: hidden;
   padding-top: 5px;
   padding-right: 5px;
 }
