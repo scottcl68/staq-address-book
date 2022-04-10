@@ -20,6 +20,4 @@ export function getRandomContacts(num){
     return contacts
 }
 
-let contacts = getRandomContacts(50);
-
-export default contacts
+export let contacts = getRandomContacts(50);
