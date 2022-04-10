@@ -116,6 +116,15 @@ class SortByDropdown extends React.Component<SortByDropdownProps, SortByDropdown
         )
     }
 }
+
+class SearchBar extends React.Component {
+    render() {
+        return (
+            <div className='search-bar-col'><input type="text" className='search-bar' placeholder='Search by name or email...'></input></div>
+        );
+    }
+}
+
 interface AppState {
     updateState: number
     sortOption: string
@@ -206,7 +215,7 @@ class App extends React.Component<{}, AppState> {
                             Contacts
                         </div>
                         <div className='search-bar-sub-header'>
-                            <div className='search-bar-col'><input type="text" className='search-bar' placeholder='Search by name or email...'></input></div>
+                            <SearchBar />
                         </div>
                         <div className='contact-list-sub-header'>
                             <SortByDropdown
@@ -221,13 +230,13 @@ class App extends React.Component<{}, AppState> {
                                 </button>
                             </div>
                         </div>
-                        <div>
+                        {/* <div>
                             <button
                             className='toggle-sort-by-last-name-ascending/descending'
                                 onClick={()=> {this.handleSortClick()}}>toggle sort ascending/descending
                             </button>
                             {this.state.sortOption}
-                        </div>
+                        </div> */}
                         <ContactList
                             contactList={this.sortedContactList(this.state.sortOption, this.state.contactListFiltered.slice())}
                             showContactList={this.state.showContactList}
