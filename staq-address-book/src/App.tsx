@@ -31,7 +31,6 @@ class ContactList extends React.Component<ContactListProps, any> {
                         name={contact.lastName + ", " + contact.firstName}
                         email={contact.email}
                         />
-                        {/* {user.lastName + ", " + user.firstName} */}
                     </div>
                 )}
                 </div>
@@ -39,39 +38,6 @@ class ContactList extends React.Component<ContactListProps, any> {
         } else {
             return
         }
-    }
-}
-interface SortByDropdownProps {
-    sortList: any
-}
-interface SortByDropdownState {
-    value: string
-}
-class SortByDropdown extends React.Component<SortByDropdownProps, SortByDropdownState> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: ''
-        };
-        this.handleChange = this.handleChange.bind(this);
-    }
-    handleChange(event) {
-        this.props.sortList(event.target.value)
-    }
-    render() {
-        return(
-            <select
-            className='select-sort'
-            onChange={(e)=>{this.handleChange(e)}}
-            >
-                  <option value="firstNameAscending">First Name, Ascending</option>
-                  <option value="firstNameDescending">First Name, Descending</option>
-                  <option value="lastNameAscending">Last Name, Ascending</option>
-                  <option value="lastNameDescending">Last Name, Descending</option>
-                  <option value="emailAscending">Email, Ascending</option>
-                  <option value="emailDescending">Email, Descending</option>
-            </select>
-        )
     }
 }
 
@@ -116,7 +82,40 @@ class AddContactForm extends React.Component<AddContactFormProps, {}> {
     }
 }
 
-
+interface SortByDropdownProps {
+    sortList: any
+}
+interface SortByDropdownState {
+    value: string
+}
+class SortByDropdown extends React.Component<SortByDropdownProps, SortByDropdownState> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: ''
+        };
+        this.handleChange = this.handleChange.bind(this);
+    }
+    handleChange = (event) => {
+        this.props.sortList(event.target.value)
+        event.preventDefault();
+    }
+    render() {
+        return(
+            <select
+            className='select-sort'
+            onChange={(this.handleChange)}
+            >
+                  <option value="firstNameAscending">First Name, Ascending</option>
+                  <option value="firstNameDescending">First Name, Descending</option>
+                  <option value="lastNameAscending">Last Name, Ascending</option>
+                  <option value="lastNameDescending">Last Name, Descending</option>
+                  <option value="emailAscending">Email, Ascending</option>
+                  <option value="emailDescending">Email, Descending</option>
+            </select>
+        )
+    }
+}
 interface AppState {
     updateState: number
     sortOption: string
@@ -184,7 +183,7 @@ class App extends React.Component<{}, AppState> {
             this.setState({sortOption: "lastNameAscending"})
         }
     }
-    handleSortOption(sortOptionFromDropDown) {
+    handleSortOption = (sortOptionFromDropDown) =>  {
         this.setState({sortOption: sortOptionFromDropDown});
     }
     render() {
@@ -217,7 +216,7 @@ class App extends React.Component<{}, AppState> {
                         <div>
                             <button
                             className='toggle-sort-by-last-name-ascending/descending'
-                                onClick={()=> {this.handleSortClick()}}>sort last name ascending
+                                onClick={()=> {this.handleSortClick()}}>toggle sort ascending/descending
                             </button>
                             {this.state.sortOption}
                         </div>
