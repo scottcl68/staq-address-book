@@ -49,16 +49,36 @@ function ListEntry (props) {
     );
 }
 
+interface ContactListProps {
+    contactList: ContactCard[] ,
+    sortBy: string,
+}
 
-class ContactList extends React.Component<{contactList: ContactCard[]}, any> {
-    constructor(props: any) {
-        super(props);
+class ContactList extends React.Component<ContactListProps, any> {
+    
+    sortedContactList(sortBy) {
+        let contactList = this.props.contactList.slice();
+        if (sortBy === 'firstNameAscending'){
+            contactList.sort((a, b) => (a.firstName < b.firstName ? -1 : 1));
+        } else if (sortBy === 'firstNameDescending') {
+            contactList.sort((a, b) => (a.firstName > b.firstName ? -1 : 1));
+        } else if (sortBy === 'emailAscending'){
+            contactList.sort((a, b) => (a.email < b.email ? -1 : 1));
+        } else if (sortBy === 'emailDescending') {
+            contactList.sort((a, b) => (a.email > b.email ? -1 : 1));
+        } else if (sortBy === 'lastNameAscending'){
+            contactList.sort((a, b) => (a.lastName < b.lastName ? -1 : 1));
+        } else if (sortBy === 'lastNameDescending') {
+            contactList.sort((a, b) => (a.lastName > b.lastName ? -1 : 1));
+        }
+        return contactList.slice();
     }
+    
     render() {
         const contactList = this.props.contactList;
         return (
             <div className='contact-list-body'>
-            {contactList.map(contact =>
+            {this.sortedContactList(this.props.sortBy).map(contact =>
                 <div>
                     <ListEntry
                     name={contact.lastName + ", " + contact.firstName}
@@ -71,6 +91,7 @@ class ContactList extends React.Component<{contactList: ContactCard[]}, any> {
         )
     }
 }
+
 
 
 
@@ -97,6 +118,12 @@ class App extends React.Component<{}, {contactList: ContactCard[]}> {
                         </div>
                         <ContactList
                             contactList={contacts}
+                            sortBy={'firstNameAscending'}
+                            // sortBy={'lastNameAscending'}
+                            // sortBy={'emailAscending'}
+                            // sortBy={'firstNameDescending'}
+                            // sortBy={'lastNameDescending'}
+                            // sortBy={'emailDescending'}
                         />
                     </div>
                 </div>
