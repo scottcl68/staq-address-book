@@ -1,10 +1,12 @@
+/* ------------------- */
+/* PAGE */
+/* ------------------- */
 .page {
-  font-size: 25px;
+  font-size: 18px;
   min-width: 450px;
 }
 .page-header {
   margin: auto;
-  height: 10%;
   text-align: center;
   width: 450px;
 }
@@ -12,8 +14,13 @@
   border: 5px solid;
   border-radius: 10px;
   padding: 2%;
-  /* width: fit-content; */
 }
+body {
+  background-color: rgb(1, 30, 34);
+  color: rgb(225, 240, 243);
+}
+/* ------------------- */
+/* CONTACT LIST */
 /* ------------------- */
 .contact-list {
   margin: auto;
@@ -28,6 +35,15 @@
   font-size: 150%;
   font-weight: bold;
 }
+.contact-list-sub-header {
+  display: flex;
+  height: 40px;
+  border-top: 3px solid;
+  border-bottom: 3px solid;
+}
+.contact-list-sub-header-col {
+  flex: 50%;
+}
 .contact-list-body {
   margin: auto;
   width: inherit;
@@ -36,41 +52,136 @@
   overflow-x: hidden;
   padding-top: 5px;
   padding-right: 5px;
+  /* display: none; */
+}
+.contact-list-body::-webkit-scrollbar {
+  width: 30px;
+  background: rgb(101, 101, 101);
+}
+.contact-list-body::-webkit-scrollbar-thumb {
+  background: rgb(130, 130, 130);
+}
+.contact-list-body::-webkit-scrollbar-track {
+  background: rgb(51, 53, 54);
 }
 .contact-list-entry {
-  border: 2px solid rgb(33, 146, 150);
-  width: inherit;
+  border: 3px solid rgb(42, 184, 188);
+  border-radius: 5px;
   padding-left: 10px;
+  padding-top: 2px;
+  padding-bottom: 5px;
+  margin: 3px;
+  background-color: rgb(11, 55, 56);
+}
+.contact-list-entry:hover {
+  background-color: rgb(23, 87, 89);
+}
+.contact-list-entry-email {
+  font-size: 70%;
+  color: rgb(121, 147, 152)
+}
+/* ------------------- */
+/* ADD CONTACT BUTTON */
+/* ------------------- */
+.add-contact-button {
+  font-size: 25px;
+  color: rgb(224, 239, 240);
+  background-color: rgb(11, 55, 56);
+  border: 3px solid;
+  border-color: rgb(78, 141, 145);
+  height: fill;
+  width: fill;
+  
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
-
-
-
-body {
-  padding: 5%;
-  background-color: rgb(3, 35, 41);
-  color: rgb(201, 218, 221);
+.add-contact-button:hover {
+  font-size: 25px;
+  color: rgb(224, 239, 240);
+  background-color: rgb(27, 86, 87);
+  border: 3px solid;
+  border-color: rgb(78, 141, 145);
+  height: fill;
+  width: fill;
+  
+  padding-left: 5px;
+  padding-right: 5px;
 }
-table {
-  table-layout: fixed;
-  width: 200px;
+/* ------------------- */
+/* ADD CONTACT FORM */
+/* ------------------- */
+.add-contact-form {
+  margin: auto;
+  width: 450px;
+  border: 4px solid;
+  border-radius: 3px;
 }
-
-tr, td {
-  border: 2px solid rgb(33, 146, 150);
+.add-contact-form-head {
+  text-align: center;
+  border:5px solid rgb(19, 117, 137);
   width: inherit;
+  font-size: 150%;
+  font-weight: bold;
 }
-
-th {
-  border:4px solid rgb(19, 117, 137);
+.add-contact-form-body {
+  margin: auto;
   width: inherit;
-}
-
-.ReactTable .rt-thead {
-  overflow-y: scroll;
-}
-
-/* div { 
+  height: 400px;
   overflow: scroll;
-} */
+  overflow-x: hidden;
+  padding-top: 5px;
+  padding-right: 5px;
+  /* display: none; */
+}
 
+/* ------------------- */
+/* SEARCH BAR*/
+/* ------------------- */
+
+.search-bar {
+  font-size: 20px;
+  position: relative;
+  bottom: 2px;
+  color: rgb(224, 239, 240);
+  height: 30px;
+  width: fill;
+  border: 3px solid;
+  border-color: rgb(236, 238, 239);
+  background-color: rgb(23, 87, 89);
+}
+.search-bar-sub-header {
+  /* display: flex; */
+  height: fit-content;
+  border-top: 3px solid;
+  border-bottom: 3px solid;
+}
+
+.search-button {
+  font-size: 25px;
+  color: rgb(224, 239, 240);
+  background-color: rgb(11, 55, 56);
+  border: 3px solid;
+  border-color: rgb(78, 141, 145);
+  height: fill;
+  width: fill;
+  
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.search-button:hover {
+  font-size: 25px;
+  color: rgb(224, 239, 240);
+  background-color: rgb(27, 86, 87);
+  border: 3px solid;
+  border-color: rgb(78, 141, 145);
+  height: fill;
+  width: fill;
+  
+  padding-left: 5px;
+  padding-right: 5px;
+}
+/* .search-bar-col {
+
+} */
