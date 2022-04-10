@@ -25,7 +25,7 @@ class ContactList extends React.Component<ContactListProps, any> {
         if (this.props.showContactList){
             return (
                 <div className='contact-list-body'>
-                {this.props.contactList.map(contact =>
+                {this.props.contactList.slice().map(contact =>
                     <div>
                         <ListEntry
                         name={contact.lastName + ", " + contact.firstName}
@@ -122,6 +122,8 @@ interface AppState {
     showContactList: boolean
     showAddContactForm: boolean
     addContact: ContactCard
+    contactList: ContactCard[]
+    contactListFiltered: ContactCard[]
 }
 
 class App extends React.Component<{}, AppState> {
@@ -133,6 +135,8 @@ class App extends React.Component<{}, AppState> {
             showContactList: true,
             showAddContactForm: false,
             addContact: new ContactCard,
+            contactList: this.externalContacts,
+            contactListFiltered: this.externalContacts,
         };
         // this.handleSelect = this.handleSelect.bind(this);
         // this.handleAddContact = this.handleAddContact.bind(this)
@@ -144,10 +148,14 @@ class App extends React.Component<{}, AppState> {
         this.setState({updateState: this.state.updateState})
     }
 
+    searchContactList = (searchString) => {
+        searchString = searchString.slice().toLowerCase();
+        const filtered = this.state.contactList.slice().filter(entry => Object.values(entry).some(val => typeof val === "string" && val.includes(searchString)));
+        this.setState({contactListFiltered: filtered})
+    }
 
-
-    sortedContactList(sortBy) {
-        let contactList = this.externalContacts.slice();
+    sortedContactList(sortBy, contactListToSort) {
+        let contactList = contactListToSort.slice();
         if (sortBy){
             if (sortBy === 'firstNameAscending'){
                 contactList.sort((a, b) => (a.firstName < b.firstName ? -1 : 1));
@@ -221,7 +229,7 @@ class App extends React.Component<{}, AppState> {
                             {this.state.sortOption}
                         </div>
                         <ContactList
-                            contactList={this.sortedContactList(this.state.sortOption).slice()}
+                            contactList={this.sortedContactList(this.state.sortOption, this.state.contactListFiltered.slice())}
                             showContactList={this.state.showContactList}
                         />
                         <AddContactForm
