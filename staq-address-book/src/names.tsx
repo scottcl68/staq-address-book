@@ -1,5 +1,3 @@
-import React from 'react';
-
 export let firstNames;
 export let surNames;
 

@@ -21,3 +21,12 @@ export function getRandomContacts(num){
 }
 
 export let contacts = getRandomContacts(50);
+
+require('fs').writeFile('./contactList.json', JSON.stringify(contacts),
+    function (err) {
+        if (err) {
+            console.error('Crap happens');
+        }
+    }
+);
+
