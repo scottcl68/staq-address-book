@@ -51,23 +51,28 @@ function ListEntry (props) {
 
 interface ContactListProps {
     contactList: ContactCard[]
+    showContactList: boolean
 }
 
 class ContactList extends React.Component<ContactListProps, any> {
     render() {
-        return (
-            <div className='contact-list-body'>
-            {this.props.contactList.map(contact =>
-                <div>
-                    <ListEntry
-                    name={contact.lastName + ", " + contact.firstName}
-                    email={contact.email}
-                    />
-                    {/* {user.lastName + ", " + user.firstName} */}
+        if (this.props.showContactList){
+            return (
+                <div className='contact-list-body'>
+                {this.props.contactList.map(contact =>
+                    <div>
+                        <ListEntry
+                        name={contact.lastName + ", " + contact.firstName}
+                        email={contact.email}
+                        />
+                        {/* {user.lastName + ", " + user.firstName} */}
+                    </div>
+                )}
                 </div>
-            )}
-            </div>
-        )
+            )
+        } else {
+            return
+        }
     }
 }
 
@@ -104,13 +109,17 @@ function SortByDropdown(props) {
 }
 
 
+interface AppState {
+    sortOption: string,
+    showContactList: boolean,
+}
 
-
-class App extends React.Component {
+class App extends React.Component<{}, AppState> {
     constructor(props) {
         super(props);
         this.state = {
             sortOption: "",
+            showContactList: true,
         };
         this.handleSelect = this.handleSelect.bind(this);
     }
@@ -139,6 +148,11 @@ class App extends React.Component {
         return contactList.slice();
     }
 
+    changeContactListVisibility() {
+        const showContactList = !this.state.showContactList
+        this.setState({showContactList: showContactList})
+    }
+
     render() {
         return (
             <div className='page'>
@@ -152,20 +166,25 @@ class App extends React.Component {
                         </div>
                         <div className='search-bar-sub-header'>
                             <div className='search-bar-col'><input type="text" className='search-bar' placeholder='Search by name or email...'></input></div>
-                            {/* <div className='search-bar-col'><button className='add-contact-button'>Go</button></div> */}
                         </div>
                         <div className='contact-list-sub-header'>
-                            {/* <div className='contact-list-sub-header-col'><button className='add-contact-button'>Add Contact</button></div> */}
                             <SortByDropdown
                                 onChange={(e) => this.handleSelect(e)}
                             />
-                            <div className='contact-list-sub-header-col'><button className='add-contact-button'>Add Contact</button></div>
+                            <div className='contact-list-sub-header-col'>
+                                <button
+                                className='add-contact-button'
+                                onClick={() => this.changeContactListVisibility()}
+                                >
+                                    Add Contact
+                                </button>
+                            </div>
 
                             
                         </div>
-
                         <ContactList
                             contactList={this.sortedContactList('lastNameAscending').slice()}
+                            showContactList={this.state.showContactList}
                             // sortBy={this.state.sortOption}
                             // sortBy={'lastNameAscending'}
                             // sortBy={'emailAscending'}
