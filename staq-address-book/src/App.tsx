@@ -103,8 +103,8 @@ class SortByDropdown extends React.Component<SortByDropdownProps, SortByDropdown
     render() {
         return(
             <select
-            className='select-sort'
-            onChange={(this.handleChange)}
+                className='select-sort'
+                onChange={this.handleChange}
             >
                   <option value="firstNameAscending">First Name, Ascending</option>
                   <option value="firstNameDescending">First Name, Descending</option>
@@ -116,11 +116,27 @@ class SortByDropdown extends React.Component<SortByDropdownProps, SortByDropdown
         )
     }
 }
-
-class SearchBar extends React.Component {
+interface SearchBarProps {
+    filterList: any
+}
+class SearchBar extends React.Component<SearchBarProps, {}> {
+    handleChange = (event) => {
+        this.props.filterList(event.target.value);
+        event.preventDefault();
+    }
     render() {
         return (
-            <div className='search-bar-col'><input type="text" className='search-bar' placeholder='Search by name or email...'></input></div>
+            <div
+                className='search-bar-col'
+            >
+                <input
+                type="text"
+                className='search-bar'
+                placeholder='Search by name or email...'
+                onChange={this.handleChange}
+                >
+                </input>
+            </div>
         );
     }
 }
@@ -215,7 +231,9 @@ class App extends React.Component<{}, AppState> {
                             Contacts
                         </div>
                         <div className='search-bar-sub-header'>
-                            <SearchBar />
+                            <SearchBar
+                                filterList={this.searchContactList}
+                            />
                         </div>
                         <div className='contact-list-sub-header'>
                             <SortByDropdown
