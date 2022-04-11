@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Component} from 'react';
 import  ContactCard from './classes';
 // import {contacts as externalContacts} from './contactListFile'
 import data from './contactList.json'
@@ -9,7 +9,7 @@ interface SearchBarProps {
     filterList: any
     showSearchBar: boolean
 }
-class SearchBar extends React.Component<SearchBarProps, {}> {
+class SearchBar extends Component<SearchBarProps, {}> {
     handleChange = (event) => {
         this.props.filterList(event.target.value);
         event.preventDefault();
@@ -35,7 +35,7 @@ interface SortByDropdownProps {
     sortList: any
     showSortDropDown: boolean
 }
-class SortByDropdown extends React.Component<SortByDropdownProps, {}> {
+class SortByDropdown extends Component<SortByDropdownProps, {}> {
     handleChange = (event) => {
         this.props.sortList(event.target.value);
         event.preventDefault();
@@ -43,17 +43,21 @@ class SortByDropdown extends React.Component<SortByDropdownProps, {}> {
     render() {
         if (this.props.showSortDropDown){
             return(
-                <select
-                    className='select-sort'
-                    onChange={this.handleChange}
-                >
-                      <option value="firstNameAscending">First Name, Ascending</option>
-                      <option value="firstNameDescending">First Name, Descending</option>
-                      <option value="lastNameAscending">Last Name, Ascending</option>
-                      <option value="lastNameDescending">Last Name, Descending</option>
-                      <option value="emailAscending">Email, Ascending</option>
-                      <option value="emailDescending">Email, Descending</option>
-                </select>
+                <div>
+                    <label className='select-label' htmlFor='select-sort' >Sort by:</label>
+                    <select
+                        className='select-sort'
+                        id='select-sort'
+                        onChange={this.handleChange}
+                    >
+                          <option value="firstNameAscending">First Name, Ascending</option>
+                          <option value="firstNameDescending">First Name, Descending</option>
+                          <option value="lastNameAscending">Last Name, Ascending</option>
+                          <option value="lastNameDescending">Last Name, Descending</option>
+                          <option value="emailAscending">Email, Ascending</option>
+                          <option value="emailDescending">Email, Descending</option>
+                    </select>
+                </div>
             )
         } else {
             return
@@ -61,34 +65,83 @@ class SortByDropdown extends React.Component<SortByDropdownProps, {}> {
 
     }
 }
-function ListEntry (props) {
-    return (
-        <div
-            className='contact-list-entry'
-            // onClick={}
-        >
-            <div>{props.name}</div>
-            <div className='contact-list-entry-email'>-{props.email}</div>
-        </div>
-    );
+
+interface ListEntryProps {
+    name: string
+    email: string
 }
+interface ListEntryState {
+    expanded: boolean
+    wrapperRef: any
+}
+class ListEntry extends Component<ListEntryProps, ListEntryState> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            expanded: false,
+            wrapperRef: React.createRef(),
+        };
+        this.handleClickOutside = this.handleClickOutside.bind(this);
+    }
+    componentDidMount() {
+        document.addEventListener("mousedown", this.handleClickOutside);
+    }
+    
+    componentWillUnmount() {
+        document.removeEventListener("mousedown", this.handleClickOutside);
+    }
+    open =()=>{
+        this.setState({expanded: true})
+    }
+    handleClickOutside(event) {
+        if (this.state.wrapperRef && !this.state.wrapperRef.current.contains(event.target)) {
+            this.setState({expanded: false});
+        };
+    }
+    toggleExpand(){
+            this.setState({expanded: !this.state.expanded})
+    }
+    render() {
+        return (
+            <div>
+                <div ref={this.state.wrapperRef}
+                    className='contact-list-entry'
+                    onClick={this.open}
+                    >
+                    <div>
+                        <div >{this.props.name}</div>
+                        <div className='contact-list-entry-email'>-{this.props.email}</div>
+                        <div className='contact-expansion'>
+                            {this.state.expanded ? (
+                                <div>
+                                <button className='contact-expansion-button'>Edit</button>
+                                <button className='contact-expansion-button-delete'color='red'>Delete</button>
+                                </div>
+                            ) : null}
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        );
+    }
+}
+
 
 interface ContactListProps {
     contactList: ContactCard[]
     showContactList: boolean
 }
-class ContactList extends React.Component<ContactListProps, any> {
+class ContactList extends Component<ContactListProps, any> {
     render() {
         if (this.props.showContactList){
             return (
                 <div className='contact-list-body'>
                 {this.props.contactList.slice().map(contact =>
-                    <div>
-                        <ListEntry
+                    <ListEntry
                         name={contact.lastName + ", " + contact.firstName}
                         email={contact.email}
-                        />
-                    </div>
+                    />
                 )}
                 </div>
             )
@@ -102,7 +155,7 @@ interface AddContactFormProps {
     showAddContactForm: boolean
     addContact: any
 }
-class AddContactForm extends React.Component<AddContactFormProps, {}> {
+class AddContactForm extends Component<AddContactFormProps, {}> {
     handleSubmit = (event) => {
         const contactFromForm = new ContactCard;
         contactFromForm.firstName = event.target.firstName.value;
@@ -125,18 +178,14 @@ class AddContactForm extends React.Component<AddContactFormProps, {}> {
                             onSubmit={this.handleSubmit}
                         >
                             <input className='add-contact-input-text' type="text" name="firstName" placeholder='First Name' required />
-                            <input className='add-contact-input-text' type="text" name="lastName" placeholder='Last Name' required />
+                            <input className='add-contact-input-text' type="text" name="lastName" placeholder='Last Name' />
                             <input className='add-contact-input-text' type="text" name="email" placeholder='Email'  />
                             <input className='add-contact-input-text' type="text" name="address" placeholder='Address'  />
                             <input className='add-contact-input-text' type="text" name="phone" placeholder='Phone Number'  />
                             <textarea className='add-contact-text-area' name="notes" placeholder='Add Notes Here...'/>
-                            
-
+                            <button className='fill-button' type="submit" onClick={this.handleSubmit}>Add Contact</button>
+                            <button className='fill-button' type='reset'>Reset</button>
                         </form>
-                    </div>
-                    <div>
-                        <button className='fill-button' type="submit">Add Contact</button>
-                        <button className='fill-button' type='reset'>Reset</button>
                     </div>
                 </div>
             )
@@ -150,7 +199,7 @@ interface CancelbuttonProps {
     showCancelButton: boolean
     showContactList: any
 }
-class Cancelbutton extends React.Component<CancelbuttonProps,{}> {
+class Cancelbutton extends Component<CancelbuttonProps,{}> {
     render() {
         if (this.props.showCancelButton) {
             return (
@@ -171,7 +220,7 @@ interface AddContactButtonProps {
     showAddContactButton: boolean
     showAddContactForm: any
 }
-class AddContactButton extends React.Component<AddContactButtonProps, {}> {
+class AddContactButton extends Component<AddContactButtonProps, {}> {
     render () {
         if (this.props.showAddContactButton) {
             return (
@@ -200,7 +249,7 @@ interface AppState {
     contactList: ContactCard[]
     contactListFiltered: ContactCard[]
 }
-class App extends React.Component<{}, AppState> {
+class App extends Component<{}, AppState> {
     constructor(props) {
         super(props);
         this.state = {

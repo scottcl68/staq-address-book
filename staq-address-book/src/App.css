@@ -73,7 +73,9 @@ body {
 .contact-list-entry:hover {
   background-color: rgb(23, 87, 89);
 }
+
 .contact-list-entry-email {
+  display: inline;
   font-size: 70%;
   color: rgb(121, 147, 152)
 }
@@ -106,10 +108,15 @@ body {
   border: 3px solid;
   border-color: rgb(129, 190, 194);
   height: 30px;
-  width: fill;
+  width: auto;
   margin: 2px;
   padding-left: 5px;
   padding-right: 5px;
+  
+  float:inline-end;
+}
+.select-label {
+  padding: 5px;
 }
 /* ------------------- */
 /* FILL BUTTON */
@@ -130,6 +137,9 @@ body {
 .fill-button:hover {
   background-color: rgb(27, 86, 87);
 }
+.fill-button:active {
+  transform: translateY(2px);
+}
 
 .bottom-button {
   position: absolute;
@@ -148,6 +158,9 @@ body {
 
 .bottom-button:hover {
   background-color: rgb(27, 86, 87);
+}
+.bottom-button:active {
+  transform: translateY(2px);
 }
 
 /* ------------------- */
@@ -189,7 +202,8 @@ body {
   resize: none;
   outline: none;
   overflow: auto;
-  height: 250px;
+  height: 240px;
+  margin-top: 4px;
   width: fill;
   background-color: rgb(52, 61, 61);
 }
@@ -214,7 +228,6 @@ textarea::-webkit-input-placeholder {
   padding-left: 5px;
   padding-right: 5px;
 }
-
 .cancel-button:hover {
   font-size: 25px;
   color: rgb(224, 239, 240);
@@ -226,4 +239,35 @@ textarea::-webkit-input-placeholder {
   
   padding-left: 5px;
   padding-right: 5px;
+}
+.cancel-button:active {
+  transform: translateY(2px);
+}
+.contact-expansion {
+  display: inline;
+  float: right;
+}
+.contact-expansion-button {
+  width: 60px;
+  color: rgb(199, 217, 219);
+  border: 3px solid;
+  border-color: rgb(199, 217, 219);
+  background-color: rgb(1, 26, 29);
+  border-radius: 2px;
+  margin: 3px;
+}
+.contact-expansion-button:active {
+  transform: translateY(2px);
+}
+.contact-expansion-button-delete {
+  width: 60px;
+  color: rgb(199, 217, 219);
+  border: 3px solid;
+  border-color: rgb(199, 217, 219);
+  background-color: rgb(116, 25, 143);
+  border-radius: 2px;
+  margin: 3px;
+}
+.contact-expansion-button-delete:active {
+  transform: translateY(2px);
 }
