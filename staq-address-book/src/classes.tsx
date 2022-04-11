@@ -1,4 +1,3 @@
-import {v4 as uuidv4} from 'uuid'
 
 export class Address {
     street?: string;
@@ -9,7 +8,6 @@ export class Address {
   }
   
 export class ContactCard {
-  key: string;
   firstName?: string;
   lastName?: string;
   address?: Address;
@@ -17,9 +15,6 @@ export class ContactCard {
   phone?: number;
   notes?: string;
 
-  constructor () {
-    this.key = uuidv4();
-  }
 }
 
 export default ContactCard
