@@ -69,6 +69,8 @@ class SortByDropdown extends Component<SortByDropdownProps, {}> {
 interface ListEntryProps {
     name: string
     email: string
+    uuid: string
+    goToEditContactForm: any
 }
 interface ListEntryState {
     expanded: boolean
@@ -101,6 +103,10 @@ class ListEntry extends Component<ListEntryProps, ListEntryState> {
     toggleExpand(){
             this.setState({expanded: !this.state.expanded})
     }
+    handleClick = (event) => {
+        this.props.goToEditContactForm(this.props.uuid);
+        event.preventDefault();
+    }
     render() {
         return (
             <div>
@@ -114,23 +120,22 @@ class ListEntry extends Component<ListEntryProps, ListEntryState> {
                         <div className='contact-expansion'>
                             {this.state.expanded ? (
                                 <div>
-                                <button className='contact-expansion-button'>Edit</button>
+                                <button className='contact-expansion-button' onClick={this.handleClick}>Edit</button>
                                 <button className='contact-expansion-button-delete'color='red'>Delete</button>
                                 </div>
                             ) : null}
                         </div>
                     </div>
-                    
                 </div>
             </div>
         );
     }
 }
 
-
 interface ContactListProps {
     contactList: ContactCard[]
     showContactList: boolean
+    goToEditContactForm: any
 }
 class ContactList extends Component<ContactListProps, any> {
     render() {
@@ -141,6 +146,8 @@ class ContactList extends Component<ContactListProps, any> {
                     <ListEntry
                         name={contact.lastName + ", " + contact.firstName}
                         email={contact.email}
+                        uuid={contact.uuid}
+                        goToEditContactForm={this.props.goToEditContactForm}
                     />
                 )}
                 </div>
@@ -184,6 +191,54 @@ class AddContactForm extends Component<AddContactFormProps, {}> {
                             <input className='add-contact-input-text' type="text" name="phone" placeholder='Phone Number'  />
                             <textarea className='add-contact-text-area' name="notes" placeholder='Add Notes Here...'/>
                             <button className='fill-button' type="submit" onClick={this.handleSubmit}>Add Contact</button>
+                            <button className='fill-button' type='reset'>Reset</button>
+                        </form>
+                    </div>
+                </div>
+            )
+        } else {
+            return
+        }
+    }
+}
+
+interface EditContactFormProps {
+    uuid: string
+    showEditContactForm: boolean
+    editContact: any
+    contact: ContactCard
+}
+class EditContactForm extends Component<EditContactFormProps, {}> {
+    handleSubmit = (event) => {
+        const contactFromForm = new ContactCard;
+        contactFromForm.uuid = this.props.uuid;
+        contactFromForm.firstName = event.target.firstName.value;
+        contactFromForm.lastName = event.target.lastName.value;
+        contactFromForm.email = event.target.email.value;
+        contactFromForm.address = event.target.address.value;
+        contactFromForm.phone = event.target.phone.value;
+        contactFromForm.notes = event.target.notes.value;
+        this.props.editContact(contactFromForm, this.props.uuid);
+        event.preventDefault();
+    }
+    render() {
+        if (this.props.showEditContactForm) {
+            return(
+                <div>
+                    <div
+                        className='add-contact-form'
+                    >
+                        <form
+                            onSubmit={this.handleSubmit}
+                        >
+                            {this.props.uuid}
+                            <input className='add-contact-input-text' type="text" name="firstName" placeholder='First Name' defaultValue={this.props.contact.firstName} />
+                            <input className='add-contact-input-text' type="text" name="lastName" placeholder='Last Name' defaultValue={this.props.contact.lastName}/>
+                            <input className='add-contact-input-text' type="text" name="email" placeholder='Email'  defaultValue={this.props.contact.email}/>
+                            <input className='add-contact-input-text' type="text" name="address" placeholder='Address'  defaultValue={this.props.contact.address}/>
+                            <input className='add-contact-input-text' type="text" name="phone" placeholder='Phone Number'  defaultValue={this.props.contact.phone}/>
+                            <textarea className='add-contact-text-area' name="notes" placeholder='Add Notes Here...'defaultValue={this.props.contact.notes}/>
+                            <button className='fill-button' type="submit" onClick={this.handleSubmit}>Save Contact</button>
                             <button className='fill-button' type='reset'>Reset</button>
                         </form>
                     </div>
@@ -246,23 +301,27 @@ interface AppState {
     showSortDropDown: boolean
     showSearchBar: boolean
     showAddContactButton: boolean
+    showEditContactForm: boolean
     contactList: ContactCard[]
     contactListFiltered: ContactCard[]
+    contactToEdit: ContactCard
 }
 class App extends Component<{}, AppState> {
     constructor(props) {
         super(props);
         this.state = {
             updateState: 0,
-            sortOption: "lastNameAscending",
+            sortOption: "firstNameAscending",
             showContactList: true,
             showAddContactForm: false,
             showCancelbutton: false,
             showSortDropDown: true,
             showSearchBar: true,
             showAddContactButton: true,
-            contactList: this.externalContacts,
-            contactListFiltered: this.externalContacts,
+            showEditContactForm: false,
+            contactList: this.externalContacts.slice(),
+            contactListFiltered: this.externalContacts.slice(),
+            contactToEdit: new ContactCard,
         };
     }
     externalContacts: ContactCard[] = data;
@@ -270,6 +329,7 @@ class App extends Component<{}, AppState> {
 
     handleAddContact = (contactFromForm) => {
         let newContactList = this.state.contactList.slice();
+        
         newContactList.push(contactFromForm);
         this.setState({contactListFiltered: newContactList});
         this.setState({contactList: newContactList});
@@ -278,7 +338,9 @@ class App extends Component<{}, AppState> {
 
     searchContactList = (searchString) => {
         searchString = searchString.slice().toLowerCase();
-        const filtered = this.state.contactList.slice().filter(entry => Object.values(entry).some(val => typeof val === "string" && val.toLocaleLowerCase().includes(searchString)));
+        const filtered = this.state.contactList.slice().filter(entry =>
+            Object.values(entry).some(val => typeof val === "string" &&
+            val.toLocaleLowerCase().includes(searchString)));
         this.setState({contactListFiltered: filtered})
     }
 
@@ -314,6 +376,7 @@ class App extends Component<{}, AppState> {
         this.setState({showAddContactButton: showContactList})
         this.setState({showAddContactForm: !showContactList})
         this.setState({showCancelbutton: !showContactList})
+        this.setState({showEditContactForm: !showContactList})
     }
     handleShowContactList = (showContactList) => {
         this.showContactList(showContactList)
@@ -329,6 +392,36 @@ class App extends Component<{}, AppState> {
     handleShowAddContactForm = (showAddContactForm) => {
         this.showAddContactForm(showAddContactForm)
     }
+    goToEditcontactForm = (uuid) => {
+        this.setState({contactToEdit: this.state.contactList.find(contact => contact.uuid === uuid)})
+        this.showEditContactForm(true)
+    }
+    editContact = (contactFromForm, uuid) => {
+        let contactList = this.state.contactList.slice();
+        contactList.forEach((contact, index) => {
+            if (contact.uuid == uuid) {
+                contactList.splice(index, 1);
+            }
+        })
+        contactList.push(contactFromForm);
+        // contactList = this.sortedContactList(this.state.sortOption, contactList)
+        this.setState({contactList: contactList})
+        
+    }
+
+    showEditContactForm(showEditContactForm) {
+        this.setState({showEditContactForm: showEditContactForm})
+        this.setState({showAddContactForm: !showEditContactForm})
+        this.setState({showCancelbutton: showEditContactForm})
+        this.setState({showSearchBar: !showEditContactForm})
+        this.setState({showSortDropDown: !showEditContactForm})
+        this.setState({showContactList: !showEditContactForm})
+        this.setState({showAddContactButton: !showEditContactForm})
+    }
+    handleShowEditContactForm = (showEditContactForm) => {
+        this.showAddContactForm(showEditContactForm)
+    }
+
     showCancelButton(showCancelButton) {
         this.setState({showCancelbutton: showCancelButton})
     }
@@ -359,10 +452,17 @@ class App extends Component<{}, AppState> {
                     <ContactList
                         contactList={this.sortedContactList(this.state.sortOption, this.state.contactListFiltered.slice())}
                         showContactList={this.state.showContactList}
+                        goToEditContactForm={this.goToEditcontactForm}
                     />
                     <AddContactForm
                         showAddContactForm={this.state.showAddContactForm}
                         addContact={this.handleAddContact}
+                    />
+                    <EditContactForm
+                        uuid = {this.state.contactToEdit.uuid}
+                        showEditContactForm={this.state.showEditContactForm}
+                        editContact={this.editContact}
+                        contact={this.state.contactToEdit}
                     />
                     <Cancelbutton
                         showCancelButton={this.state.showCancelbutton}
@@ -374,9 +474,7 @@ class App extends Component<{}, AppState> {
                     />
                 </div>
             </div>
-
         );
     }
 }
-
 export default App;

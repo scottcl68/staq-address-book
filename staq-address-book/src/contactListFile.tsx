@@ -1,5 +1,6 @@
 import {firstNames, surNames as lastNames} from './names'
 import ContactCard from './classes';
+import {v4 as uuidv4} from 'uuid'
 
 export function getRandomContacts(num){
     //initialize contact container
@@ -14,6 +15,7 @@ export function getRandomContacts(num){
         contact.firstName = firstName;
         contact.lastName = lastName;
         contact.email = email;
+        contact.uuid = uuidv4();
         //add new random contact to contact container
         contacts.push(contact);
     }

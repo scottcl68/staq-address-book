@@ -3,6 +3,7 @@ exports.__esModule = true;
 exports.contacts = exports.getRandomContacts = void 0;
 var names_1 = require("./names");
 var classes_1 = require("./classes");
+var uuid_1 = require("uuid");
 function getRandomContacts(num) {
     //initialize contact container
     var contacts = [];
@@ -15,6 +16,7 @@ function getRandomContacts(num) {
         contact.firstName = firstName;
         contact.lastName = lastName;
         contact.email = email;
+        contact.uuid = (0, uuid_1.v4)();
         //add new random contact to contact container
         contacts.push(contact);
     }
