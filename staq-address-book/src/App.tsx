@@ -231,14 +231,14 @@ class EditContactForm extends Component<EditContactFormProps, {}> {
                         <form
                             onSubmit={this.handleSubmit}
                         >
-                            {this.props.uuid}
+                            {/* {this.props.uuid} */}
                             <input className='add-contact-input-text' type="text" name="firstName" placeholder='First Name' defaultValue={this.props.contact.firstName} />
                             <input className='add-contact-input-text' type="text" name="lastName" placeholder='Last Name' defaultValue={this.props.contact.lastName}/>
                             <input className='add-contact-input-text' type="text" name="email" placeholder='Email'  defaultValue={this.props.contact.email}/>
                             <input className='add-contact-input-text' type="text" name="address" placeholder='Address'  defaultValue={this.props.contact.address}/>
                             <input className='add-contact-input-text' type="text" name="phone" placeholder='Phone Number'  defaultValue={this.props.contact.phone}/>
                             <textarea className='add-contact-text-area' name="notes" placeholder='Add Notes Here...'defaultValue={this.props.contact.notes}/>
-                            <button className='fill-button' type="submit" onClick={this.handleSubmit}>Save Contact</button>
+                            <button className='fill-button' type="submit" /*onClick={this.handleSubmit}*/>Save Contact</button>
                             <button className='fill-button' type='reset'>Reset</button>
                         </form>
                     </div>
@@ -400,12 +400,16 @@ class App extends Component<{}, AppState> {
         let contactList = this.state.contactList.slice();
         contactList.forEach((contact, index) => {
             if (contact.uuid == uuid) {
-                contactList.splice(index, 1);
+                contact.firstName = contactFromForm.firstName;
+                contact.lastName = contactFromForm.lastName;
+                contact.email = contactFromForm.email;
+                contact.address = contactFromForm.address;
+                contact.phone = contactFromForm.phone;
+                contact.notes = contactFromForm.notes;
             }
         })
-        contactList.push(contactFromForm);
-        // contactList = this.sortedContactList(this.state.sortOption, contactList)
         this.setState({contactList: contactList})
+        this.showEditContactForm(false);
         
     }
 
